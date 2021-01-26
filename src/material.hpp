@@ -10,8 +10,10 @@
 struct Material
 {
     color3 color;
+    double shininess;
 
-    Material(color3 color = {0.5, 0.5, 0.5}) : color(color)
+    Material(color3 color = {0.5, 0.5, 0.5}, double shininess = 10)
+        : color(color), shininess(shininess)
     {
     }
 };

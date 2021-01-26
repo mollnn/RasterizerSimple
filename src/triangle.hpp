@@ -32,6 +32,7 @@ struct Triangle
     vec3 AutoNormal()
     {
         normal = cross(p[1] - p[0], p[2] - p[0]);
+        normal.normalize();
         return normal;
     }
 
