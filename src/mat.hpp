@@ -186,4 +186,12 @@ struct __det_solver<1>
     }
 };
 
+vec3 &vec3::rotate(double a_x, double a_y, double a_z)
+{
+    mat<3, 3> r_x = {(vec3){1, 0, 0}, {0, cos(a_x), -sin(a_x)}, {0, sin(a_x), cos(a_x)}};
+    mat<3, 3> r_y = {(vec3){cos(a_y), 0, sin(a_y)}, {0, 1, 0}, {-sin(a_y), 0, cos(a_y)}};
+    mat<3, 3> r_z = {(vec3){cos(a_z), -sin(a_z), 0}, {sin(a_z), cos(a_z), 0}, {0, 0, 1}};
+    return *this = r_x * r_y * r_z * (*this);
+}
+
 #endif

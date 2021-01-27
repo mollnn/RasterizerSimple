@@ -4,13 +4,12 @@
 #include <vector>
 
 #include "triangle.hpp"
+#include "light.hpp"
 
-struct Scene 
+struct Scene
 {
-    std::vector<Triangle> faces;
+    std::vector<Triangle> face;
+    std::vector<Light> light;
 };
-
-
-
 
 #endif
