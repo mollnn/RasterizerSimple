@@ -43,7 +43,7 @@ struct Triangle
 
     bool InTriangle(point3 q)
     {
-        if (!OnPlane)
+        if (!OnPlane(q))
             return false;
         vec3 v[3];
         for (int i = 0; i < 3; i++)

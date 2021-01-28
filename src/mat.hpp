@@ -15,6 +15,15 @@ struct mat
 {
     vec<ncols> rows[nrows] = {{}};
 
+    mat(std::initializer_list<vec<ncols>> il)
+    {
+        int i = 0;
+        for (auto it = il.begin(); it != il.end(); it++)
+        {
+            rows[i++] = *it;
+        }
+    }
+
     mat() = default;
     vec<ncols> &operator[](const int idx)
     {

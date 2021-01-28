@@ -35,7 +35,18 @@ struct Image
 
     color3 Get(int x, int y)
     {
+        assert(0 <= x && x < size_x);
+        assert(0 <= y && y < size_y);
         return buffer[x][y];
+    }
+
+    color3 Add(int x, int y, color3 color)
+    {
+        std::cerr << "Add " << x << " " << y << " " << color.x << " " << color.y << " " << color.z << std::endl;
+        auto origin = this->Get(x, y);
+        origin = origin + color;
+        this->Set(x, y, origin);
+        return origin;
     }
 
     TGAImage ToTGAImage()

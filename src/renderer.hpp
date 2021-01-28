@@ -9,6 +9,7 @@
 #include "material.hpp"
 #include "scene.hpp"
 #include "camera.hpp"
+#include "shader.hpp"
 
 struct Renderer
 {
@@ -53,7 +54,48 @@ struct Renderer
         mat<4, 4> mat_ortho = mat_ortho_scale * mat_ortho_shift;
         mat<4, 4> mat_persp = mat_ortho * mat_persp2ortho;
 
-        // continue!
+        mat<4, 4> mat_vp = mat_persp * mat_view;
+
+        for (auto light : scene.light)
+        {
+            for (auto face : scene.face)
+            {
+                std::cerr << "render a face a light" << std::endl;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    face.p[i] = point_cast(mat_vp * point_cast(face.p[i]));
+                    std::cerr << face.p[i][0] << ", " << face.p[i][1] << ", " << face.p[i][2] << "\t\t" << std::endl;
+                }
+                system("pause");
+                for (int image_y = 0; image_y < image.size_y; image_y++)
+                {
+                    for (int image_x = 0; image_x < image.size_x; image_x++)
+                    {
+                        double ortho_x = -1 + (2 * image_x + 1.0) / image.size_x;
+                        double ortho_y = -1 + (2 * image_y + 1.0) / image.size_y;
+
+                        std::cerr << "#image_x"
+                                  << ":" << image_x << "  "
+                                  << "#image_y"
+                                  << ":" << image_y << " "
+                                  << "#ortho_x"
+                                  << ":" << ortho_x << "  "
+                                  << "#ortho_y"
+                                  << ":" << ortho_y << std::endl;
+
+                        point3 proj_p = {ortho_x, ortho_y, box_n};
+
+                        std::cerr << "#proj_p  " << ortho_x << ", " << ortho_y << ", " << box_n << std::endl;
+
+                        if (face.InTriangle(proj_p))
+                        {
+                            image.Add(image_x, image_y, color3(0.3, 0.3, 0.3));
+                        }
+                    }
+                }
+            }
+        }
     }
 };
 

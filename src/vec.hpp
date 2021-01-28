@@ -13,6 +13,16 @@ template <int n>
 struct vec
 {
     vec() = default;
+
+    vec(std::initializer_list<double> il)
+    {
+        int i = 0;
+        for (auto it = il.begin(); it != il.end(); it++)
+        {
+            data[i++] = *it;
+        }
+    }
+
     double &operator[](const int i)
     {
         assert(i >= 0 && i < n);
@@ -118,6 +128,7 @@ struct vec<2>
 {
     vec() = default;
     vec(double X, double Y) : x(X), y(Y) {}
+    
     double &operator[](const int i)
     {
         assert(i >= 0 && i < 2);
