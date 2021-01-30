@@ -1,5 +1,7 @@
 #ifndef __VEC_HPP__
 #define __VEC_HPP__
+#include "common.h"
+
 
 #include <cmath>
 #include <cassert>

@@ -1,6 +1,8 @@
 #ifndef __RENDERER_HPP__
 #define __RENDERER_HPP__
 
+#include "common.h"
+
 #include "vec.hpp"
 #include "mat.hpp"
 #include "color.hpp"
@@ -64,14 +66,10 @@ struct Renderer
         {
             for (auto face : scene.face)
             {
-                // std::cerr << "render a face a light" << std::endl;
-
                 // Vertex Transform: make face in the ortho space
                 for (int i = 0; i < 3; i++)
                 {
                     face.p[i] = point_cast(mat_vp * point_cast(face.p[i]));
-
-                    // std::cerr << face.p[i][0] << ", " << face.p[i][1] << ", " << face.p[i][2] << "\t\t" << std::endl;
                 }
 
                 // Projected Face: exactly on the near plane
@@ -93,18 +91,7 @@ struct Renderer
                         double ortho_x = -1 + (2 * image_x + 1.0) / image.size_x;
                         double ortho_y = -1 + (2 * image_y + 1.0) / image.size_y;
 
-                        // std::cerr << "#image_x"
-                        //           << ":" << image_x << "  "
-                        //           << "#image_y"
-                        //           << ":" << image_y << " "
-                        //           << "#ortho_x"
-                        //           << ":" << ortho_x << "  "
-                        //           << "#ortho_y"
-                        //           << ":" << ortho_y << std::endl;
-
                         point3 proj_p = {ortho_x, ortho_y, box_n};
-
-                        // std::cerr << "#proj_p  " << ortho_x << ", " << ortho_y << ", " << box_n << std::endl;
 
                         if (projected_face.InTriangle(proj_p))
                         {

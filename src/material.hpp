@@ -1,5 +1,7 @@
 #ifndef __MATERIAL_HPP__
 #define __MATERIAL_HPP__
+#include "common.h"
+
 
 #include <cmath>
 #include <cassert>

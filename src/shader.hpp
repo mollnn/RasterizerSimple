@@ -1,5 +1,7 @@
 #ifndef __SHADER_HPP__
 #define __SHADER_HPP__
+#include "common.h"
+
 
 #include "vec.hpp"
 #include "triangle.hpp"

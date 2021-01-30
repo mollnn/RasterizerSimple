@@ -1,6 +1,8 @@
 #ifndef __CAMERA_HPP__
 #define __CAMERA_HPP__
 
+#include "common.h"
+
 #include "vec.hpp"
 
 struct Camera

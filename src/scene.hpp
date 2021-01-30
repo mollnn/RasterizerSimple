@@ -1,6 +1,8 @@
 #ifndef __SCENE_HPP__
 #define __SCENE_HPP__
 
+#include "common.h"
+
 #include <vector>
 
 #include "triangle.hpp"

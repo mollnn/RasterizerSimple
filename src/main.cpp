@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include "common.h"
+
 
 #include "vec.hpp"
 #include "mat.hpp"

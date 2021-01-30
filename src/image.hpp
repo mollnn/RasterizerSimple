@@ -1,5 +1,6 @@
 #ifndef __IMAGE_HPP__
 #define __IMAGE_HPP__
+#include "common.h"
 
 #include <vector>
 #include "color.hpp"
@@ -43,7 +44,7 @@ struct Image
     color3 Add(int x, int y, color3 color)
     {
         // std::cerr << "Add " << x << " " << y << " " << color.x << " " << color.y << " " << color.z << std::endl;
-        
+
         auto origin = this->Get(x, y);
         origin = origin + color;
         this->Set(x, y, origin);
