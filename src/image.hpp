@@ -42,7 +42,8 @@ struct Image
 
     color3 Add(int x, int y, color3 color)
     {
-        std::cerr << "Add " << x << " " << y << " " << color.x << " " << color.y << " " << color.z << std::endl;
+        // std::cerr << "Add " << x << " " << y << " " << color.x << " " << color.y << " " << color.z << std::endl;
+        
         auto origin = this->Get(x, y);
         origin = origin + color;
         this->Set(x, y, origin);
