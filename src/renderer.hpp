@@ -17,6 +17,27 @@ struct Renderer
 {
     void Render(const Scene &scene, const Camera &camera, Image &image)
     {
+        Image zbuffer(image.size_x, image.size_y);
+
+        // OrthoBox parameters
+        double box_n = -1;
+        double box_f = -5;
+        double box_l = -2;
+        double box_r = 2;
+        double box_b = -2;
+        double box_t = 2;
+
+        // Init zbuffer
+        auto Z2C = [&](double x) -> double { return (x + 1) / 2; };
+        auto C2Z = [&](double x) -> double { return x * 2 - 1; };
+        for (int i = 0; i < image.size_x; i++)
+        {
+            for (int j = 0; j < image.size_y; j++)
+            {
+                zbuffer.Set(i, j, color3(0, 0, 0));
+            }
+        }
+
         // Copy some basic parameters
         vec3 cam_pos = camera.position;
         vec3 cam_gaze = camera.gaze;
@@ -33,14 +54,6 @@ struct Renderer
                                 {-cam_gaze.x, -cam_gaze.y, -cam_gaze.z, 0},
                                 {0, 0, 0, 1}};
         mat<4, 4> mat_view = mat_r_view * mat_t_view;
-
-        // OrthoBox parameters
-        double box_n = -1;
-        double box_f = -5;
-        double box_l = -2;
-        double box_r = 2;
-        double box_b = -2;
-        double box_t = 2;
 
         // MVP-Proj Transform Matrix
         mat<4, 4> mat_ortho_scale = {(vec4){2 / (box_r - box_l), 0, 0, 0},
@@ -66,6 +79,8 @@ struct Renderer
         {
             for (auto face : scene.face)
             {
+                color3 dbg_color = {rand() * 1. / RAND_MAX, rand() * 1. / RAND_MAX, rand() * 1. / RAND_MAX};
+
                 // Vertex Transform: make face in the ortho space
                 for (int i = 0; i < 3; i++)
                 {
@@ -80,8 +95,6 @@ struct Renderer
                     projected_face.p[i].z = box_n;
                 }
 
-                system("pause");
-
                 // For each image pixels
                 for (int image_y = 0; image_y < image.size_y; image_y++)
                 {
@@ -95,12 +108,37 @@ struct Renderer
 
                         if (projected_face.InTriangle(proj_p))
                         {
-                            image.Add(image_x, image_y, color3(0.3, 0.3, 0.3));
+                            vec2 P[3] = {{face.p[0].x, face.p[0].y},
+                                         {face.p[1].x, face.p[1].y},
+                                         {face.p[2].x, face.p[2].y}};
+                            vec2 Q = {ortho_x, ortho_y};
+                            double area[3] = {abs(cross(P[1] - Q, P[2] - Q)),
+                                              abs(cross(P[2] - Q, P[0] - Q)),
+                                              abs(cross(P[0] - Q, P[1] - Q))};
+                            double total_area = area[0] + area[1] + area[2];
+                            double weight[3] = {area[0] / total_area,
+                                                area[1] / total_area,
+                                                area[2] / total_area};
+
+                            double ortho_z = weight[0] * face.p[0].z +
+                                             weight[1] * face.p[1].z +
+                                             weight[2] * face.p[2].z;
+                            double dbg1 = Z2C(ortho_z);
+                            double dbg2 = zbuffer.Get(image_x, image_y).x;
+                            // std::cerr << weight[0] << " " << weight[1] << " " << weight[2] << std::endl;
+                            // std::cerr << ortho_z << "->" << dbg1 << " " << dbg2 << std::endl;
+                            if (Z2C(ortho_z) > zbuffer.Get(image_x, image_y).x)
+                            {
+                                zbuffer.Set(image_x, image_y, color3(Z2C(ortho_z), Z2C(ortho_z), Z2C(ortho_z)));
+                                image.Set(image_x, image_y, dbg_color);
+                            }
                         }
                     }
                 }
             }
         }
+
+        zbuffer.WriteToTGA("zbuffer.tga");
     }
 };
 
