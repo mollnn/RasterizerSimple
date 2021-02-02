@@ -1,5 +1,7 @@
 #ifndef __TRIANGLE_HPP__
 #define __TRIANGLE_HPP__
+#include "common.h"
+
 
 #include <cmath>
 #include <cassert>
@@ -9,7 +11,7 @@
 #include "mat.hpp"
 #include "material.hpp"
 
-#define dbg(x) std::cerr << #x << "=" << x << "; ";
+
 
 struct Triangle
 {
@@ -45,12 +47,6 @@ struct Triangle
 
     bool InTriangle(point3 q)
     {
-        // dbg(p[0]);
-        // dbg(p[1]);
-        // dbg(p[2]);
-        // dbg(q);
-        // std::cerr << std::endl;
-        
         if (!OnPlane(q))
             return false;
         vec3 v[3];

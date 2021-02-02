@@ -3,6 +3,8 @@
 #ifndef __TGAIMAGE_H__
 #define __TGAIMAGE_H__
 
+#include "common.h"
+
 #include <cstdint>
 #include <fstream>
 #include <vector>

@@ -1,5 +1,7 @@
 #ifndef __LIGHT_HPP__
 #define __LIGHT_HPP__
+#include "common.h"
+
 
 #include "vec.hpp"
 #include "color.hpp"
