@@ -71,6 +71,8 @@ struct Renderer
         mat<4, 4> mat_ortho = mat_ortho_scale * mat_ortho_shift;
         mat<4, 4> mat_persp = mat_ortho * mat_persp2ortho;
 
+        mat<4, 4> mat_persp_inv = mat_persp.invert();
+
         // MVP-View+Proj Transform Matrix
         mat<4, 4> mat_vp = mat_persp * mat_view;
 
@@ -123,14 +125,16 @@ struct Renderer
                             double ortho_z = weight[0] * face.p[0].z +
                                              weight[1] * face.p[1].z +
                                              weight[2] * face.p[2].z;
-                            double dbg1 = Z2C(ortho_z);
-                            double dbg2 = zbuffer.Get(image_x, image_y).x;
-                            // std::cerr << weight[0] << " " << weight[1] << " " << weight[2] << std::endl;
-                            // std::cerr << ortho_z << "->" << dbg1 << " " << dbg2 << std::endl;
+
+                            point3 ortho_p = {ortho_x, ortho_y, ortho_z};
+                            point3 hit_pos = point_cast(mat_persp_inv * point_cast(ortho_p));
+
                             if (Z2C(ortho_z) > zbuffer.Get(image_x, image_y).x)
                             {
+                                Shader shader;
+                                color3 radiance = shader.Shade(cam_pos, light, face, hit_pos);
                                 zbuffer.Set(image_x, image_y, color3(Z2C(ortho_z), Z2C(ortho_z), Z2C(ortho_z)));
-                                image.Set(image_x, image_y, dbg_color);
+                                image.Set(image_x, image_y, radiance);
                             }
                         }
                     }
