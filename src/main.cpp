@@ -24,8 +24,12 @@ int main(int argc, char *argv[])
 
     Scene scene;
 
-    scene.face.push_back(Triangle({-1, 0, 0}, {1, 0, 0}, {0, 2, 0}, Material({1, 1, 1}, 5)));
-    scene.face.push_back(Triangle({-1, 0, 1}, {1, 0, 1}, {0, 3, -4}, Material({1, 1, 1}, 5)));
+    for (int i = 0; i < 10; i++)
+        scene.face.push_back(Triangle({rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5},
+                                      {rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5},
+                                      {rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5, rand() * 0.0001 - 1.5},
+                                      Material({1, 1, 1}, 5)));
+
     scene.light.push_back(Light({0, 0.2, 0.2}, {1, 1, 1}));
     scene.light.push_back(Light({0, 5, 1}, {0.3, 0.3, 0.3}));
 
